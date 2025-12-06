@@ -1,8 +1,8 @@
-﻿using Maui.Charting.Views;
+﻿using System.Collections.ObjectModel;
+using System.Windows.Input;
 using MedicalCharting.Models;
 using MedicalCharting.Services;
-using System.Collections.ObjectModel;
-using System.Windows.Input;
+using Maui.Charting.Views;
 
 namespace Maui.Charting.ViewModels
 {
@@ -11,17 +11,6 @@ namespace Maui.Charting.ViewModels
         private readonly DataStore _store;
 
         public ObservableCollection<Patient> Patients { get; } = new();
-
-        // Fields for Add Patient
-        public string NewFirstName { get; set; } = "";
-        public string NewLastName { get; set; } = "";
-        public string NewAddress { get; set; } = "";
-        public DateTime NewBirthDate { get; set; } = DateTime.Today;
-        public string NewRace { get; set; } = "";
-        public Gender NewGender { get; set; } = Gender.Unknown;
-
-        public IEnumerable<Gender> GenderOptions =>
-            Enum.GetValues(typeof(Gender)).Cast<Gender>();
 
         public ICommand AddCommand { get; }
         public ICommand DeleteCommand { get; }
@@ -49,28 +38,21 @@ namespace Maui.Charting.ViewModels
 
         private void AddPatient()
         {
-            if (string.IsNullOrWhiteSpace(NewFirstName) ||
-                string.IsNullOrWhiteSpace(NewLastName))
+            var p = new Patient
             {
-                Application.Current.MainPage.DisplayAlert("Error", "Name fields are required.", "OK");
-                return;
-            }
-
-            var patient = new Patient
-            {
-                Id = _store.Patients.Any() ? _store.Patients.Max(p => p.Id) + 1 : 1,
+                Id = _store.Patients.Any() ? _store.Patients.Max(x => x.Id) + 1 : 1,
                 FirstName = NewFirstName,
                 LastName = NewLastName,
                 Address = NewAddress,
-                BirthDate = NewBirthDate,
                 Race = NewRace,
-                Gender = NewGender
+                Gender = NewGender,
+                BirthDate = NewBirthdate
             };
 
-            _store.Patients.Add(patient);
+            _store.Patients.Add(p);
             _store.NotifyPatientsChanged();
 
-            ClearForm();
+            Clear();
         }
 
         private void DeletePatient(Patient p)
@@ -81,29 +63,37 @@ namespace Maui.Charting.ViewModels
             _store.NotifyPatientsChanged();
         }
 
-        private async void OpenEditPage(Patient patient)
+        private async void OpenEditPage(Patient p)
         {
-            if (patient == null) return;
+            if (p == null) return;
 
-            var vm = new PatientDetailViewModel(_store, patient, this);
+            var vm = new PatientDetailViewModel(_store, p, this);
             await Application.Current.MainPage.Navigation.PushAsync(new EditPatientPage(vm));
         }
 
-        private void ClearForm()
+        // Form fields
+        public string NewFirstName { get; set; } = "";
+        public string NewLastName { get; set; } = "";
+        public string NewAddress { get; set; } = "";
+        public string NewRace { get; set; } = "";
+        public Gender NewGender { get; set; } = Gender.Unknown;
+        public DateTime NewBirthdate { get; set; } = DateTime.Today;
+
+        private void Clear()
         {
             NewFirstName = "";
             NewLastName = "";
             NewAddress = "";
             NewRace = "";
             NewGender = Gender.Unknown;
-            NewBirthDate = DateTime.Today;
+            NewBirthdate = DateTime.Today;
 
             OnPropertyChanged(nameof(NewFirstName));
             OnPropertyChanged(nameof(NewLastName));
             OnPropertyChanged(nameof(NewAddress));
             OnPropertyChanged(nameof(NewRace));
             OnPropertyChanged(nameof(NewGender));
-            OnPropertyChanged(nameof(NewBirthDate));
+            OnPropertyChanged(nameof(NewBirthdate));
         }
     }
 }

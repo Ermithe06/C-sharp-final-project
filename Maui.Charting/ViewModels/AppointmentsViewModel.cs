@@ -148,12 +148,12 @@ namespace Maui.Charting.ViewModels
         // -----------------------------
         // Edit existing appointment
         // -----------------------------
-        private async void OpenEditPage(Appointment appt)
+        public void OpenEditPage(Appointment appt)
         {
             var vm = new AppointmentDetailViewModel(_store, _service, appt, this);
-            await Application.Current.MainPage.Navigation.PushAsync(
-                new EditAppointmentPage(vm));
+            Application.Current.MainPage.Navigation.PushAsync(new EditAppointmentPage(vm));
         }
+
 
         // -----------------------------
         // Delete appointment

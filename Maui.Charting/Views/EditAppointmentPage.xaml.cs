@@ -1,14 +1,13 @@
 ﻿using Maui.Charting.ViewModels;
 
-namespace Maui.Charting.Views;
-
-public partial class EditAppointmentPage : ContentPage
+namespace Maui.Charting.Views
 {
-    public EditAppointmentPage(AppointmentDetailViewModel vm)
+    public partial class EditAppointmentPage : ContentPage
     {
-        InitializeComponent();
-        BindingContext = vm;
+        public EditAppointmentPage(AppointmentDetailViewModel vm)
+        {
+            InitializeComponent();
+            BindingContext = vm;
+        }
     }
 }
-
-

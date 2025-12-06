@@ -6,3 +6,4 @@
         public decimal Cost { get; set; }
     }
 }
+

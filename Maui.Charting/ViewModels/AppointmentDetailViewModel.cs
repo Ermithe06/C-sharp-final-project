@@ -3,50 +3,87 @@ using System.Windows.Input;
 using MedicalCharting.Models;
 using MedicalCharting.Services;
 
-namespace Maui.Charting.ViewModels;
-
-public class AppointmentDetailViewModel : BaseViewModel
+namespace Maui.Charting.ViewModels
 {
-    private readonly DataStore _store;
-    private readonly AppointmentService _service;
-    private readonly AppointmentsViewModel _parent;
-
-    public Appointment Appointment { get; }
-
-    public ObservableCollection<Patient> Patients => new(_store.Patients);
-    public ObservableCollection<Physician> Physicians => new(_store.Physicians);
-
-    public ICommand SaveCommand { get; }
-    public ICommand DeleteCommand { get; }
-
-    public AppointmentDetailViewModel(DataStore store, AppointmentService service, Appointment existing, AppointmentsViewModel parent)
+    public class AppointmentDetailViewModel : BaseViewModel
     {
-        _store = store;
-        _service = service;
-        _parent = parent;
+        private readonly DataStore _store;
+        private readonly AppointmentService _service;
+        private readonly Appointment _appointment;
+        private readonly AppointmentsViewModel _parent;
 
-        Appointment = existing;
+        public ObservableCollection<string> Diagnoses { get; } = new();
+        public ObservableCollection<Treatment> Treatments { get; } = new();
 
-        SaveCommand = new Command(Save);
-        DeleteCommand = new Command(Delete);
-    }
+        public ICommand AddDiagnosisCommand { get; }
+        public ICommand DeleteDiagnosisCommand { get; }
 
-    private async void Save()
-    {
-        if (!_service.TrySchedule(Appointment, out string msg))
+        public ICommand AddTreatmentCommand { get; }
+        public ICommand DeleteTreatmentCommand { get; }
+
+        public string NewDiagnosis { get; set; } = "";
+        public string NewTreatmentName { get; set; } = "";
+        public decimal NewTreatmentCost { get; set; }
+
+        public AppointmentDetailViewModel(DataStore store, AppointmentService service,
+                                          Appointment appointment,
+                                          AppointmentsViewModel parent)
         {
-            await Application.Current.MainPage.DisplayAlert("Error", msg, "OK");
-            return;
+            _store = store;
+            _service = service;
+            _appointment = appointment;
+            _parent = parent;
+
+            foreach (var d in appointment.Diagnoses)
+                Diagnoses.Add(d);
+
+            foreach (var t in appointment.Treatments)
+                Treatments.Add(t);
+
+            AddDiagnosisCommand = new Command(AddDiagnosis);
+            DeleteDiagnosisCommand = new Command<string>(DeleteDiagnosis);
+
+            AddTreatmentCommand = new Command(AddTreatment);
+            DeleteTreatmentCommand = new Command<Treatment>(DeleteTreatment);
         }
 
-        _parent.Refresh();
-        await Application.Current.MainPage.Navigation.PopAsync();
-    }
+        private void AddDiagnosis()
+        {
+            if (string.IsNullOrWhiteSpace(NewDiagnosis)) return;
 
-    private async void Delete()
-    {
-        _store.Appointments.Remove(Appointment);
-        _parent.Refresh();
-        await Application.Current.MainPage.Navigation.PopAsync();
+            Diagnoses.Add(NewDiagnosis);
+            _appointment.Diagnoses.Add(NewDiagnosis);
+            NewDiagnosis = "";
+            OnPropertyChanged(nameof(NewDiagnosis));
+        }
+
+        private void DeleteDiagnosis(string d)
+        {
+            Diagnoses.Remove(d);
+            _appointment.Diagnoses.Remove(d);
+        }
+
+        private void AddTreatment()
+        {
+            var t = new Treatment
+            {
+                Name = NewTreatmentName,
+                Cost = NewTreatmentCost
+            };
+
+            Treatments.Add(t);
+            _appointment.Treatments.Add(t);
+
+            NewTreatmentName = "";
+            NewTreatmentCost = 0;
+            OnPropertyChanged(nameof(NewTreatmentName));
+            OnPropertyChanged(nameof(NewTreatmentCost));
+        }
+
+        private void DeleteTreatment(Treatment t)
+        {
+            Treatments.Remove(t);
+            _appointment.Treatments.Remove(t);
+        }
     }
 }

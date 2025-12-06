@@ -50,7 +50,20 @@
                                     <Button Text="Edit"
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PatientsViewModel}}, Path=EditCommand}"
                                             CommandParameter="{Binding}" />
-
+                                    <CollectionView ItemsSource="{Binding Patients}">
+                                        <CollectionView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Frame Padding="10">
+                                                    <Frame.BackgroundColor>
+                                                        <MultiBinding Converter="{StaticResource AgeColorConverter}">
+                                                            <Binding Path="BirthDate" />
+                                                        </MultiBinding>
+                                                    </Frame.BackgroundColor>
+                                                    <Label Text="{Binding FullName}" />
+                                                </Frame>
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                    </CollectionView>
                                     <Button Text="Delete"
                                             BackgroundColor="Red"
                                             TextColor="White"
