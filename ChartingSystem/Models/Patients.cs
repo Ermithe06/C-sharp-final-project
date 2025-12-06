@@ -1,30 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
-namespace MedicalCharting.Models
+namespace MedicalCharting.Models;
+
+public class Patient : INotifyPropertyChanged
 {
-    public class Patient
+    public int Id { get; set; }
+
+    private string _firstName = "";
+    public string FirstName
     {
-        public int Id { get; set; }
-        public string FirstName { get; set; } = "";
-        public string LastName { get; set; } = "";
-        public string Address { get; set; } = "";
-        public DateTime BirthDate { get; set; }
-        public string Race { get; set; } = "";
-
-        public Gender Gender { get; set; } = Gender.Unknown;
-
-        public List<MedicalNote> Notes { get; set; } = new();
-
-        public string FullName => $"{FirstName} {LastName}";
+        get => _firstName;
+        set { _firstName = value; OnPropertyChanged(); OnPropertyChanged(nameof(FullName)); }
     }
 
-    public enum Gender
+    private string _lastName = "";
+    public string LastName
     {
-        Unknown,
-        Male,
-        Female,
-        NonBinary,
-        Other
+        get => _lastName;
+        set { _lastName = value; OnPropertyChanged(); OnPropertyChanged(nameof(FullName)); }
     }
+
+    public DateTime BirthDate { get; set; }
+    public string Address { get; set; } = "";
+    public string Race { get; set; } = "";
+    public Gender Gender { get; set; }
+
+    public string FullName => $"{FirstName} {LastName}";
+    public int Age => DateTime.Today.Year - BirthDate.Year;
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+    void OnPropertyChanged([CallerMemberName] string? name = null)
+        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 }

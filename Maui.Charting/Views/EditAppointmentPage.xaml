@@ -1,52 +1,66 @@
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:Maui.Charting.ViewModels"
-             x:Class="Maui.Charting.Views.EditAppointmentPage">
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Maui.Charting.Views.EditAppointmentPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:Maui.Charting.ViewModels">
 
     <ScrollView>
-        <VerticalStackLayout Padding="14" Spacing="14">
+        <VerticalStackLayout Padding="12" Spacing="12">
 
-            <Label Text="Diagnoses" FontAttributes="Bold" FontSize="18" />
+            <!-- Diagnoses -->
+            <Label Text="Diagnoses" FontAttributes="Bold" />
 
-            <HorizontalStackLayout>
+            <HorizontalStackLayout Spacing="8">
                 <Entry Placeholder="New Diagnosis"
+                       HorizontalOptions="FillAndExpand"
                        Text="{Binding NewDiagnosis}" />
-                <Button Text="Add" Command="{Binding AddDiagnosisCommand}" />
+                <Button Text="Add"
+                        Command="{Binding AddDiagnosisCommand}" />
             </HorizontalStackLayout>
 
             <CollectionView ItemsSource="{Binding Diagnoses}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="8">
                             <Label Text="{Binding}" />
                             <Button Text="X"
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AppointmentDetailViewModel}}, Path=DeleteDiagnosisCommand}"
+                                    BackgroundColor="Red"
+                                    TextColor="White"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AppointmentDetailViewModel}},
+                                                      Path=RemoveDiagnosisCommand}"
                                     CommandParameter="{Binding}" />
                         </HorizontalStackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
+            <!-- Treatments -->
+            <Label Text="Treatments" FontAttributes="Bold" />
 
-            <Label Text="Treatments" FontAttributes="Bold" FontSize="18" />
-
-            <HorizontalStackLayout>
+            <HorizontalStackLayout Spacing="8">
                 <Entry Placeholder="Treatment Name"
+                       HorizontalOptions="FillAndExpand"
                        Text="{Binding NewTreatmentName}" />
                 <Entry Placeholder="Cost"
+                       WidthRequest="90"
                        Keyboard="Numeric"
                        Text="{Binding NewTreatmentCost}" />
-                <Button Text="Add" Command="{Binding AddTreatmentCommand}" />
+                <Button Text="Add"
+                        Command="{Binding AddTreatmentCommand}" />
             </HorizontalStackLayout>
 
             <CollectionView ItemsSource="{Binding Treatments}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="8">
                             <Label Text="{Binding Name}" />
                             <Label Text="{Binding Cost, StringFormat='${0:F2}'}" />
                             <Button Text="X"
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AppointmentDetailViewModel}}, Path=DeleteTreatmentCommand}"
+                                    BackgroundColor="Red"
+                                    TextColor="White"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AppointmentDetailViewModel}},
+                                                      Path=RemoveTreatmentCommand}"
                                     CommandParameter="{Binding}" />
                         </HorizontalStackLayout>
                     </DataTemplate>

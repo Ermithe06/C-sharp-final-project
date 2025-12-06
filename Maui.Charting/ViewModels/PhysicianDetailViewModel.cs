@@ -1,37 +1,33 @@
 ﻿using MedicalCharting.Models;
 using MedicalCharting.Services;
+using System.Windows.Input;
 
-namespace Maui.Charting.ViewModels
+namespace Maui.Charting.ViewModels;
+
+public class PhysicianDetailViewModel : BaseViewModel
 {
-    public class PhysicianDetailViewModel : BaseViewModel
+    private readonly DataStore _store;
+    private readonly PhysiciansViewModel _parent;
+
+    public Physician Physician { get; }
+
+    public ICommand SaveCommand { get; }
+
+    public PhysicianDetailViewModel(DataStore store, Physician physician, PhysiciansViewModel parent)
     {
-        private readonly DataStore _store;
-        private readonly PhysiciansViewModel _parent;
+        _store = store;
+        _parent = parent;
+        Physician = physician;
 
-        public Physician Physician { get; }
+        SaveCommand = new Command(Save);
+    }
 
-        public PhysicianDetailViewModel(DataStore store, Physician physician, PhysiciansViewModel parent)
-        {
-            _store = store;
-            Physician = physician;
-            _parent = parent;
-        }
+    private async void Save()
+    {
+        _store.NotifyPhysiciansChanged();
+        _parent.Refresh();
 
-        public void Save()
-        {
-            var existing = _store.Physicians.FirstOrDefault(p => p.Id == Physician.Id);
-
-            if (existing != null)
-            {
-                existing.FirstName = Physician.FirstName;
-                existing.LastName = Physician.LastName;
-                existing.LicenseNumber = Physician.LicenseNumber;
-                existing.GraduationDate = Physician.GraduationDate;
-                existing.Specialization = Physician.Specialization;
-            }
-
-            _store.NotifyPhysiciansChanged();
-            _parent.Refresh();
-        }
+        await Application.Current.MainPage.DisplayAlert(
+            "Saved", "Physician updated successfully.", "OK");
     }
 }

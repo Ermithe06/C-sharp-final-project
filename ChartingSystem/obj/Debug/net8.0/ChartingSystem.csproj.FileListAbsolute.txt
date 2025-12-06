@@ -1,0 +1,11 @@
+C:\Users\ermit\source\repos\ChartingSystem\ChartingSystem\bin\Debug\net8.0\ChartingSystem.deps.json
+C:\Users\ermit\source\repos\ChartingSystem\ChartingSystem\bin\Debug\net8.0\ChartingSystem.dll
+C:\Users\ermit\source\repos\ChartingSystem\ChartingSystem\bin\Debug\net8.0\ChartingSystem.pdb
+C:\Users\ermit\source\repos\ChartingSystem\ChartingSystem\obj\Debug\net8.0\ChartingSystem.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ermit\source\repos\ChartingSystem\ChartingSystem\obj\Debug\net8.0\ChartingSystem.AssemblyInfoInputs.cache
+C:\Users\ermit\source\repos\ChartingSystem\ChartingSystem\obj\Debug\net8.0\ChartingSystem.AssemblyInfo.cs
+C:\Users\ermit\source\repos\ChartingSystem\ChartingSystem\obj\Debug\net8.0\ChartingSystem.csproj.CoreCompileInputs.cache
+C:\Users\ermit\source\repos\ChartingSystem\ChartingSystem\obj\Debug\net8.0\ChartingSystem.dll
+C:\Users\ermit\source\repos\ChartingSystem\ChartingSystem\obj\Debug\net8.0\refint\ChartingSystem.dll
+C:\Users\ermit\source\repos\ChartingSystem\ChartingSystem\obj\Debug\net8.0\ChartingSystem.pdb
+C:\Users\ermit\source\repos\ChartingSystem\ChartingSystem\obj\Debug\net8.0\ref\ChartingSystem.dll

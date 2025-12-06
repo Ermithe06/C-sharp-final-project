@@ -12,7 +12,7 @@ namespace MedicalCharting.Services
         public List<Physician> Physicians { get; set; } = new();
         public List<Appointment> Appointments { get; set; } = new();
 
-        // 🔥 Events so ViewModels update automatically
+        //Events so ViewModels update automatically
         public event Action? PatientsChanged;
         public event Action? PhysiciansChanged;
         public event Action? AppointmentsChanged;
@@ -105,7 +105,7 @@ namespace MedicalCharting.Services
         }
 
         // --------------------------------------------------------
-        // 🔥 PERSISTENCE SYSTEM (CORRECT — ONLY ONE VERSION)
+        // PERSISTENCE SYSTEM 
         // --------------------------------------------------------
         public static class Persistence
         {
